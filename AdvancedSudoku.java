@@ -52,12 +52,11 @@ public class AdvancedSudoku extends JFrame {
                 sudokuPanel.add(cells[row][col]);
 
                 // Add borders for subgrids
-                if (row % SUBGRID_SIZE == 0 && row != 0) {
-                    cells[row][col].setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
-                }
-                if (col % SUBGRID_SIZE == 0 && col != 0) {
-                    cells[row][col].setBorder(BorderFactory.createMatteBorder(0, 2, 0, 0, Color.BLACK));
-                }
+                int top = (row % SUBGRID_SIZE == 0) ? 2 : 1;
+                int left = (col % SUBGRID_SIZE == 0) ? 2 : 1;
+                int bottom = (row == GRID_SIZE - 1) ? 2 : 1;
+                int right = (col == GRID_SIZE - 1) ? 2 : 1;
+                cells[row][col].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
             }
         }
 
@@ -100,7 +99,11 @@ public class AdvancedSudoku extends JFrame {
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 String text = cells[row][col].getText();
-                if (text.isEmpty() || Integer.parseInt(text) != solution[row][col]) {
+                try {
+                    if (text.isEmpty() || Integer.parseInt(text) != solution[row][col]) {
+                        return false;
+                    }
+                } catch (NumberFormatException e) {
                     return false;
                 }
             }
@@ -114,6 +117,7 @@ public class AdvancedSudoku extends JFrame {
                 if (puzzle[row][col] == 0) {
                     cells[row][col].setText("");
                     cells[row][col].setEditable(true);
+                    cells[row][col].setBackground(Color.WHITE);
                 }
             }
         }
