@@ -1,11 +1,9 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class AdvancedSudoku extends JFrame {
-    private static final int GRID_SIZE = 9; // 9x9 Sudoku grid
-    private static final int SUBGRID_SIZE = 3; // 3x3 subgrids
+    private static final int GRID_SIZE = 9;
+    private static final int SUBGRID_SIZE = 3;
     private JTextField[][] cells = new JTextField[GRID_SIZE][GRID_SIZE];
     private int[][] solution = {
             { 5, 3, 4, 6, 7, 8, 9, 1, 2 },
@@ -17,8 +15,7 @@ public class AdvancedSudoku extends JFrame {
             { 9, 6, 1, 5, 3, 7, 2, 8, 4 },
             { 2, 8, 7, 4, 1, 9, 6, 3, 5 },
             { 3, 4, 5, 2, 8, 6, 1, 7, 9 }
-    }; // Solution grid
-
+    };
     private int[][] puzzle = {
             { 5, 3, 0, 0, 7, 0, 0, 0, 0 },
             { 6, 0, 0, 1, 9, 5, 0, 0, 0 },
@@ -29,59 +26,63 @@ public class AdvancedSudoku extends JFrame {
             { 0, 6, 0, 0, 0, 0, 2, 8, 0 },
             { 0, 0, 0, 4, 1, 9, 0, 0, 5 },
             { 0, 0, 0, 0, 8, 0, 0, 7, 9 }
-    }; // Puzzle grid (zeros represent empty cells)
+    };
 
     public AdvancedSudoku() {
         Container cp = getContentPane();
         cp.setLayout(new BorderLayout());
-
         JPanel sudokuPanel = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
         sudokuPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        sudokuPanel.setBackground(new Color(245, 245, 245));
 
         // Initialize cells
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 cells[row][col] = new JTextField();
                 cells[row][col].setHorizontalAlignment(JTextField.CENTER);
-                cells[row][col].setFont(new Font("Monospaced", Font.BOLD, 20));
+                cells[row][col].setFont(new Font("SansSerif", Font.BOLD, 20));
+                cells[row][col].setForeground(new Color(60, 60, 60));
+                cells[row][col].setBorder(BorderFactory.createLineBorder(new Color(230, 230, 230), 1));
+                cells[row][col].setOpaque(true);
                 if (puzzle[row][col] != 0) {
                     cells[row][col].setText(String.valueOf(puzzle[row][col]));
                     cells[row][col].setEditable(false);
-                    cells[row][col].setBackground(Color.LIGHT_GRAY);
+                    cells[row][col].setBackground(new Color(200, 200, 200));
+                } else {
+                    cells[row][col].setBackground(Color.WHITE);
                 }
                 sudokuPanel.add(cells[row][col]);
-
-                // Add borders for subgrids
+                
+                // Border logic for subgrid
                 int top = (row % SUBGRID_SIZE == 0) ? 2 : 1;
                 int left = (col % SUBGRID_SIZE == 0) ? 2 : 1;
                 int bottom = (row == GRID_SIZE - 1) ? 2 : 1;
                 int right = (col == GRID_SIZE - 1) ? 2 : 1;
-                cells[row][col].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, Color.BLACK));
+                cells[row][col].setBorder(BorderFactory.createMatteBorder(top, left, bottom, right, new Color(0, 102, 204)));
             }
         }
 
-        // Control buttons
         JPanel controlPanel = new JPanel();
+        controlPanel.setBackground(new Color(245, 245, 245));
         JButton checkButton = new JButton("Check Solution");
         JButton resetButton = new JButton("Reset");
 
-        checkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (checkSolution()) {
-                    JOptionPane.showMessageDialog(null, "Congratulations! The solution is correct!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Solution is incorrect. Keep trying!");
-                }
+        checkButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        checkButton.setBackground(new Color(0, 153, 76));
+        checkButton.setForeground(Color.WHITE);
+        resetButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        resetButton.setBackground(new Color(204, 0, 0));
+        resetButton.setForeground(Color.WHITE);
+
+        checkButton.addActionListener(e -> {
+            if (checkSolution()) {
+                JOptionPane.showMessageDialog(null, "Congratulations! The solution is correct!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Solution is incorrect. Keep trying!");
             }
         });
 
-        resetButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetBoard();
-            }
-        });
+        resetButton.addActionListener(e -> resetBoard());
 
         controlPanel.add(checkButton);
         controlPanel.add(resetButton);
@@ -124,11 +125,6 @@ public class AdvancedSudoku extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AdvancedSudoku();
-            }
-        });
+        SwingUtilities.invokeLater(AdvancedSudoku::new);
     }
 }
