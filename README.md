@@ -13,11 +13,5 @@
   <li><strong>Java</strong>: Core language for building and managing the game logic.</li>
   <li><strong>Swing/AWT</strong> (if used): GUI framework to create a visually appealing interface.</li>
 </ul>
-<h2>Getting Started</h2>
-<p>To run the Advanced Sudoku Game:</p>
-<ol>
-  <li>Clone the repository.</li>
-  <li>Import the project into your preferred Java IDE.</li>
-  <li>Run the main application file to start solving puzzles!</li>
-</ol>
+
 
